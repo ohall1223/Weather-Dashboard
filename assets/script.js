@@ -1,27 +1,27 @@
 // global variables
 var currentCity;
 var APIkey = "81f51e0aad6e42c02f096b9b679089ee"
-var testUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=30.489772&lon=-99.771335"
+var today = moment()
 
 console.log("Linked")
 
 // function that gets the current weather information 
 function getCurrentWeather (event){
     // get the city name from the user input
-    var city = "Denver"
+    var city = document.querySelector("#searchCity").value
     
-    // $("#searchCity").val()
+    console.log(city)
     // set the request URL 
     console.log("fetching")
-    var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey
+    var requestURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIkey}`
     fetch(requestURL)
     .then((response) => {
-        console.log(response)
         return response.json();
     })
     .then((response) =>{
         console.log(response)
         // save city to local storage 
+        console.log(city)
         saveCity(city);
         $("#savedCities").text("");
         // display list of searched cities
@@ -30,26 +30,32 @@ function getCurrentWeather (event){
         getFiveDayForecast(event)
         // fetch an icon for the current weather from OpenWEather
         var currentWeatherIcon = "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
-        var currentTimeUTC = response.dt;
-        var currentTimeZoneOffset = response.timezone;
-        var currentTimeZoneOffsetHours = currentTimeZoneOffset / 60 / 60;
-        var currentMoment = moment.unix(currentTimeUTC).utc().utcOffset(currentTimeZoneOffsetHours);
+        var currentDate = today.format("MM/DD/YYYY")
 
-        var currentWeatherHTML =
-        `<h3>${response.name} ${currentMoment.format("(MM/DD/YY")}<img src="${currentWeatherIcon}"></h3>
-        <ul>
-            <li>Temp: ${response.main.temp}</li>
-            <li>Wind: ${response.main.humidity}</li>
-            <li>Humidity: ${response.main.temp}</li>
-            <li>UV Index: ${response.wind.speed}</li>
-        </ul>`
-        $("#currentWeather").html(currentWeatherHTML)
+        document.querySelector("#currentCity").textContent = city + " (" + currentDate + ")"
+        document.querySelector("#currentTemp").textContent = "Temp: " 
+        document.querySelector("#currentWind").textContent = "Wind: " 
+        document.querySelector("#currentHumid").textContent = "Humidity: " 
+        document.querySelector("#currentUV").textContent = "UV: " 
+
+        // var currentWeatherHTML =
+        // `<h3>${response.name} ${currentMoment.format("(MM/DD/YY")}<img src="${currentWeatherIcon}"></h3>
+        // <ul>
+        //     <li>Temp: ${response.main.temp}</li>
+        //     <li>Wind: ${response.main.humidity}</li>
+        //     <li>Humidity: ${response.main.temp}</li>
+        //     <li>UV Index: ${response.wind.speed}</li>
+        // </ul>`
+        // $("#currentWeather").html(currentWeatherHTML)
     })
+}
+    
     
     // function to fetch the 5 day forcast 
     function getFiveDayForecast (event){
-        var city = $('#searchCity').val();
-        var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey
+        var city = document.querySelector("#searchCity").value
+        console.log(city)
+        var requestURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${APIkey}`
         fetch(requestURL)
         .then((response) => {
             return response.json();
@@ -60,9 +66,9 @@ function getCurrentWeather (event){
             <h2>5-day Forecast:</h2>
             <div id="fiveDayForecastUl" class="d-inline-flex flex-wrap">`
             // iterate over the five day forecast
-            for(var i =0; i < response.length; i++){
-                var datData = response.list[i];
-                var TimeUTC = dayData.dt;
+            for(var i =0; i < response.list.length; i++){
+                var dayData = response.list[i];
+                var dayTimeUTC = dayData.dt;
                 var timeZoneOffset = response.city.timezone;
                 var timeZoneOffsetHours = timeZoneOffset / 60 / 60;
                 var thisMoment = moment.unix(dayTimeUTC).utc().utcOffset(timeZoneOffsetHours);
@@ -124,6 +130,15 @@ function getCurrentWeather (event){
         currentCity=$("#searchCity").val()
         getCurrentWeather(event);
     })
-}
+
+    $("#searchedCities").on("click", (event) => {
+        event.preventDefault();
+        $("#searchCity").val(event.target.textContent);
+        currentCity = $(searchCity).val()
+        getCurrentWeather(event);
+    })
+
+
+renderCities()
 
 getCurrentWeather()
