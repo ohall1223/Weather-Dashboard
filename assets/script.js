@@ -13,7 +13,7 @@ function getCurrentWeather (event){
     console.log(city)
     // set the request URL 
     console.log("fetching")
-    var requestURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIkey}`
+    var requestURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${APIkey}`
     fetch(requestURL)
     .then((response) => {
         return response.json();
@@ -31,22 +31,35 @@ function getCurrentWeather (event){
         // fetch an icon for the current weather from OpenWEather
         var currentWeatherIcon = "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
         var currentDate = today.format("MM/DD/YYYY")
+        
+        // var elem = {}
+        // elem.src = "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png"
+        // document.getElementById("currentIcon").appendChild(elem);
 
+        var latitude = response.coord.lat
+        var longitude = response.coord.lon
+
+        
         document.querySelector("#currentCity").textContent = city + " (" + currentDate + ")"
-        document.querySelector("#currentTemp").textContent = "Temp: " 
-        document.querySelector("#currentWind").textContent = "Wind: " 
-        document.querySelector("#currentHumid").textContent = "Humidity: " 
-        document.querySelector("#currentUV").textContent = "UV: " 
+        document.querySelector("#currentTemp").textContent = "Temp: " + response.main.temp + "\xB0F" 
+        document.querySelector("#currentWind").textContent = "Wind: " + response.wind.speed + " MPH"
+        document.querySelector("#currentHumid").textContent = "Humidity: " + response.main.humidity + "%"
 
-        // var currentWeatherHTML =
-        // `<h3>${response.name} ${currentMoment.format("(MM/DD/YY")}<img src="${currentWeatherIcon}"></h3>
-        // <ul>
-        //     <li>Temp: ${response.main.temp}</li>
-        //     <li>Wind: ${response.main.humidity}</li>
-        //     <li>Humidity: ${response.main.temp}</li>
-        //     <li>UV Index: ${response.wind.speed}</li>
-        // </ul>`
-        // $("#currentWeather").html(currentWeatherHTML)
+        var uvRequestURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${APIkey}`
+
+        fetch(uvRequestURL)
+        .then((response) => {
+            return response.json()
+        })
+        .then((response) =>{
+            console.log(response)
+            var uvIndex = response.current.uvi
+
+            document.querySelector("#currentUV").textContent = "UV Index: " + uvIndex
+            
+        })
+        
+     
     })
 }
     
@@ -62,15 +75,9 @@ function getCurrentWeather (event){
         })
         .then((response) =>{
             console.log(response)
-            var fiveDayForecastHTML = `
-            <h2>5-day Forecast:</h2>
-            <div id="fiveDayForecastUl" class="d-inline-flex flex-wrap">`
             // iterate over the five day forecast
             for(var i =0; i < response.list.length; i++){
                 var dayData = response.list[i];
-                var dayTimeUTC = dayData.dt;
-                var timeZoneOffset = response.city.timezone;
-                var timeZoneOffsetHours = timeZoneOffset / 60 / 60;
                 var thisMoment = moment.unix(dayTimeUTC).utc().utcOffset(timeZoneOffsetHours);
                 var iconURL = "https://openweathermap.org/img/w/" + dayData.weather[0].icon + ".png";
             }
