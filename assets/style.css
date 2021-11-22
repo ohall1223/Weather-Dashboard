@@ -9,3 +9,17 @@
   color: #ffc482;
   padding: 20px;
 }
+
+#currentInfo {
+  background-color: #2b3a67;
+  color: #66999b;
+}
+
+#fiveDay {
+  background-color: #2b3a67;
+  color: #ffc482;
+}
+
+.card {
+  background-color: #2b3a67;
+}
