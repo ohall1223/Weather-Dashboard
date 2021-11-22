@@ -14,13 +14,13 @@
     <title>Weather Dashboard</title>
   </head>
   <body>
-    <header class="text-container">Weather Dashboard</header>
+    <h1 id="header" class="text-container">Weather Dashboard</h1>
     <main id="content" class="container">
       <div class="row">
         <div id="content-left">
           <section id="citySearch">
             <form>
-              <h1>Search for a City:</h1>
+              <h2>Search for a City:</h2>
               <input
                 id="searchCity"
                 class="form-control"
@@ -33,9 +33,7 @@
             </form>
           </section>
           <section id="savedCities">
-            <ul id="searchedCities" class="list-group">
-              <li>Searched Cities</li>
-            </ul>
+            <ul id="searchedCities" class="list-group"></ul>
           </section>
         </div>
         <div id="content-right">
@@ -49,6 +47,36 @@
           </section>
           <section id="fiveDay" class="mt-5">
             <h2>5-Day Forecast:</h2>
+            <div class="card">
+              <h4 id="date1"></h4>
+              <h6 id="futureTemp1"></h6>
+              <h6 id="futureWind1"></h6>
+              <h6 id="futureHumid1"></h6>
+            </div>
+            <div class="card">
+              <h4 id="date2"></h4>
+              <h6 id="futureTemp2"></h6>
+              <h6 id="futureWind2"></h6>
+              <h6 id="futureHumid2"></h6>
+            </div>
+            <div class="card">
+              <h4 id="date3"></h4>
+              <h6 id="futureTemp3"></h6>
+              <h6 id="futureWind3"></h6>
+              <h6 id="futureHumid3"></h6>
+            </div>
+            <div class="card">
+              <h4 id="date4"></h4>
+              <h6 id="futureTemp4"></h6>
+              <h6 id="futureWind4"></h6>
+              <h6 id="futureHumid4"></h6>
+            </div>
+            <div class="card">
+              <h4 id="date5"></h4>
+              <h6 id="futureTemp5"></h6>
+              <h6 id="futureWind5"></h6>
+              <h6 id="futureHumid5"></h6>
+            </div>
           </section>
         </div>
       </div>

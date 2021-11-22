@@ -68,7 +68,7 @@ function getCurrentWeather (event){
     function getFiveDayForecast (event){
         var city = document.querySelector("#searchCity").value
         console.log(city)
-        var requestURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${APIkey}`
+        var requestURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${APIkey}`
         fetch(requestURL)
         .then((response) => {
             return response.json();
@@ -76,13 +76,36 @@ function getCurrentWeather (event){
         .then((response) =>{
             console.log(response)
             // iterate over the five day forecast
-            for(var i =0; i < response.list.length; i++){
-                var dayData = response.list[i];
-                var thisMoment = moment.unix(dayTimeUTC).utc().utcOffset(timeZoneOffsetHours);
-                var iconURL = "https://openweathermap.org/img/w/" + dayData.weather[0].icon + ".png";
-            }
-            fiveDayForecastHTML += `</div>`;
-            $("#fiveDayForecast").html(fiveDayForecastHTML)
+                var dayData1 = response.list[2];
+                document.querySelector("#date1").textContent = dayData1.dt_txt
+                document.querySelector("#futureTemp1").textContent = "Temp: " + dayData1.main.temp + "\xB0F" 
+                document.querySelector("#futureWind1").textContent = "Wind: " + dayData1.wind.speed + " MPH"
+                document.querySelector("#futureHumid1").textContent = "Humidity: " + dayData1.main.humidity + "%"
+
+                var dayData2 = response.list[10];
+                document.querySelector("#date2").textContent = dayData2.dt_txt
+                document.querySelector("#futureTemp2").textContent = "Temp: " + dayData2.main.temp + "\xB0F" 
+                document.querySelector("#futureWind2").textContent = "Wind: " + dayData2.wind.speed + " MPH"
+                document.querySelector("#futureHumid2").textContent = "Humidity: " + dayData2.main.humidity + "%"
+
+                var dayData3 = response.list[18];
+                document.querySelector("#date3").textContent = dayData3.dt_txt
+                document.querySelector("#futureTemp3").textContent = "Temp: " + dayData3.main.temp + "\xB0F" 
+                document.querySelector("#futureWind3").textContent = "Wind: " + dayData3.wind.speed + " MPH"
+                document.querySelector("#futureHumid3").textContent = "Humidity: " + dayData3.main.humidity + "%"
+
+                var dayData4 = response.list[26];
+                document.querySelector("#date4").textContent = dayData4.dt_txt
+                document.querySelector("#futureTemp4").textContent = "Temp: " + dayData4.main.temp + "\xB0F" 
+                document.querySelector("#futureWind4").textContent = "Wind: " + dayData4.wind.speed + " MPH"
+                document.querySelector("#futureHumid4").textContent = "Humidity: " + dayData4.main.humidity + "%"
+
+                var dayData5 = response.list[34];
+                document.querySelector("#date5").textContent = dayData5.dt_txt
+                document.querySelector("#futureTemp5").textContent = "Temp: " + dayData5.main.temp + "\xB0F" 
+                document.querySelector("#futureWind5").textContent = "Wind: " + dayData5.wind.speed + " MPH"
+                document.querySelector("#futureHumid5").textContent = "Humidity: " + dayData5.main.humidity + "%"
+            
         })
 
     }
@@ -90,18 +113,18 @@ function getCurrentWeather (event){
     function saveCity (newCity) {
         var cityExsists = false;
         // if the city exsists in local storage 
-        for(var i = 0; i < localStorage.length; i++){
-            if(localStorage["cities" + i] === newCity){
-                // no action needed, break the loop 
-                cityExsists = true;
-                return 
-            }
+        // for(var i = 0; i < localStorage.length; i++){
+        //     if(localStorage["cities" + i] === newCity){
+        //         // no action needed, break the loop 
+        //         cityExsists = true;
+        //         return 
+        //     }
             // if ths city does not exsist in local storage 
             if(cityExsists === false){
                 // add it to local storage 
                 localStorage.setItem('cities' + localStorage.length, newCity)
             }
-        }
+        // }
     }
 
     function renderCities () {
@@ -127,7 +150,10 @@ function getCurrentWeather (event){
          } else {
              cityElement = `<button type = "button" class"list-group-item list-group-item-action">${city}</button></li>`
          }
-         $('#cityResults').prepend(cityElement);
+         var cityList = document.createElement("li")
+         cityList.innerHTML = document.querySelector("#searchCity").value
+        document.querySelector("#citySearch").appendChild(cityList)
+
      } 
     }
 
